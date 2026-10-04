@@ -2,6 +2,8 @@ import streamlit as st
 import streamlit.components.v1 as components
 import requests
 import base64
+import json
+import os
 from datetime import datetime
 
 # Ustawienia strony
@@ -57,35 +59,22 @@ if not API_KEY:
 
 # Funkcja pomocnicza kodująca lokalne pliki webp do formatu Base64
 def get_base64_image(image_path):
+    if not os.path.exists(image_path):
+        return ""
     try:
         with open(image_path, "rb") as img_file:
             return f"data:image/webp;base64,{base64.b64encode(img_file.read()).decode()}"
     except Exception:
         return ""
 
-img_01d = get_base64_image("01d.webp")
-img_01n = get_base64_image("01n.webp")
-img_02d = get_base64_image("02d.webp")
-img_02n = get_base64_image("02n.webp")
-img_03d = get_base64_image("03d.webp")
-img_03n = get_base64_image("03n.webp")
-img_04d = get_base64_image("04d.webp")
-img_04n = get_base64_image("04n.webp")
-img_09d = get_base64_image("09d.webp")
-img_09n = get_base64_image("09n.webp")
-img_10d = get_base64_image("10d.webp")
-img_10n = get_base64_image("10n.webp")
-img_11d = get_base64_image("11d.webp")
-img_11n = get_base64_image("11n.webp")
-img_13d = get_base64_image("13d.webp")
-img_13n = get_base64_image("13n.webp")
-img_50d = get_base64_image("50d.webp")
-img_50n = get_base64_image("50n.webp")
+# Automatyczne załadowanie wszystkich kodów pogodowych do jednego słownika
+IKONY_POGODY = [
+    "01d", "01n", "02d", "02n", "03d", "03n", "04d", "04n",
+    "09d", "09n", "10d", "10n", "11d", "11n", "13d", "13n", "50d", "50n"
+]
 
-kody_ikon = ["01d", "01n", "02d", "02n", "03d", "03n", "04d", "04n", 
-             "09d", "09n", "10d", "10n", "11d", "11n", "13d", "13n", "50d", "50n"]
-
-obrazy = {kod: get_base64_image(f"{kod}.webp") for kod in kody_ikon}
+wallpapers_dict = {kod: get_base64_image(f"{kod}.webp") for kod in IKONY_POGODY}
+wallpapers_json = json.dumps(wallpapers_dict)
 
 # Baza predefiniowanych miast
 MIASTA = {
@@ -136,7 +125,8 @@ if "detect_lat" in query_params and "detect_lon" in query_params:
 # ----------------- PANEL BOCZNY -----------------
 with st.sidebar:
     try:
-        st.image("logo.png", width="stretch")
+        if os.path.exists("logo.png"):
+            st.image("logo.png", use_container_width=True)
     except Exception:
         pass
     st.header("Ustawienia Lokalizacji")
@@ -149,7 +139,7 @@ with st.sidebar:
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Szukaj", type="primary", width="stretch"):
+        if st.button("Szukaj", type="primary", use_container_width=True):
             if wpisane_miasto in MIASTA:
                 st.session_state.miasto_nazwa = wpisane_miasto
                 st.session_state.lat = MIASTA[wpisane_miasto]["lat"]
@@ -174,7 +164,7 @@ with st.sidebar:
                     st.error(f"Błąd wyszukiwania: {e}")
 
     with col2:
-        if st.button("Odśwież", width="stretch"):
+        if st.button("Odśwież", use_container_width=True):
             st.rerun()
 
     st.markdown("---")
@@ -451,6 +441,7 @@ dashboard_html = f"""
         justify-content: space-between;
         box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
         height: 100%;
+        background-color: #1e293b;
         background-size: cover !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
@@ -745,41 +736,17 @@ dashboard_html = f"""
 </div>
 
 <script>
-    // Baza zdjęć z zakodowanymi plikami Base64 z repozytorium oraz URL-ami zewnętrznymi
-    const wallpapers = {{
-        // Słonecznie / dzień
-        '01d': '{img_01d}',
-        // Czyste niebo / noc
-        '01n': '{img_01n}',
-        // Lekkie zachmurzenie dzień
-        '02d': '{img_02d}',
-        // Lekkie zachmurzenie noc
-        '02n': '{img_02n}',
-        // Chmury
-        '03d': '{img_03d}',
-        '03n': '{img_03n}',
-        '04d': '{img_04d}',
-        '04n': '{img_04n}',
-        // Przelotne opady / deszcz
-        '09d': '{img_09d}',
-        '09n': '{img_09n}',
-        '10d': '{img_10d}',
-        '10n': '{img_10n}',
-        // Burza
-        '11d': '{img_11d}',
-        '11n': '{img_11n}',
-        // Śnieg
-        '13d': '{img_13d}',
-        '13n': '{img_13n}',
-        // Mgła / zamglenie
-        '50d': '{img_50d}',
-        '50n': '{img_50n}'
-    }};
+    // Bezpiecznie przekazany słownik grafik w formacie JSON
+    const wallpapers = {wallpapers_json};
 
     function setHeroBackground(icon) {{
-        const url = wallpapers[icon] || wallpapers['02d'];
+        const url = wallpapers[icon] || wallpapers['02d'] || '';
         const hero = document.getElementById('hero-card');
-        hero.style.background = `linear-gradient(rgba(15, 23, 42, 0.40), rgba(15, 23, 42, 0.65)), url('${{url}}') center/cover no-repeat`;
+        if (url) {{
+            hero.style.background = `linear-gradient(rgba(15, 23, 42, 0.40), rgba(15, 23, 42, 0.65)), url('${{url}}') center/cover no-repeat`;
+        }} else {{
+            hero.style.background = `linear-gradient(135deg, #1e293b 0%, #0f172a 100%)`;
+        }}
     }}
 
     const initialWeather = {{
