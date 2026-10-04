@@ -68,13 +68,6 @@ img_01n = get_base64_image("01n.webp")
 img_02d = get_base64_image("02d.webp")
 img_02n = get_base64_image("02n.webp")
 
-# Funkcja pomocnicza renderująca HTML w iframe zgodna z najnowszym API
-def render_iframe(html_code, height=820, scrolling=False):
-    if hasattr(st, "iframe"):
-        st.iframe(html_code, height=height, scrolling=scrolling)
-    else:
-        components.html(html_code, height=height, scrolling=scrolling)
-
 # Baza predefiniowanych miast
 MIASTA = {
     "Płock": {"lat": 52.5463, "lon": 19.7065, "kraj": "Polska"},
@@ -207,7 +200,7 @@ with st.sidebar:
     }
     </script>
     """
-    render_iframe(gps_button_html, height=75)
+    components.html(gps_button_html, height=75)
 
 lat = st.session_state.lat
 lon = st.session_state.lon
@@ -865,4 +858,4 @@ dashboard_html = f"""
 """
 
 # Główny dashboard pogodowy
-render_iframe(dashboard_html, height=820, scrolling=False)
+components.html(dashboard_html, height=820, scrolling=False)
