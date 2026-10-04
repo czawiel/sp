@@ -737,24 +737,24 @@ dashboard_html = f"""
         // Lekkie zachmurzenie noc
         '02n': '{img_02n}',
         // Chmury
-        '03d': 'https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1200&q=80',
-        '03n': 'https://images.unsplash.com/photo-1532978379173-523e16f371f2?auto=format&fit=crop&w=1200&q=80',
-        '04d': 'https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?auto=format&fit=crop&w=1200&q=80',
-        '04n': 'https://images.unsplash.com/photo-1532978379173-523e16f371f2?auto=format&fit=crop&w=1200&q=80',
+        '03d': '{img_03d}',
+        '03n': '{img_03n}',
+        '04d': '{img_04d}',
+        '04n': '{img_04n}',
         // Przelotne opady / deszcz
-        '09d': 'https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1200&q=80',
-        '09n': 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=1200&q=80',
-        '10d': 'https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?auto=format&fit=crop&w=1200&q=80',
-        '10n': 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=1200&q=80',
+        '09d': '{img_09d}',
+        '09n': '{img_09n}',
+        '10d': '{img_10d}',
+        '10n': '{img_10n}',
         // Burza
-        '11d': 'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?auto=format&fit=crop&w=1200&q=80',
-        '11n': 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=1200&q=80',
+        '11d': '{img_11d}',
+        '11n': '{img_11n}',
         // Śnieg
-        '13d': 'https://images.unsplash.com/photo-1491002052546-bf38f186af56?auto=format&fit=crop&w=1200&q=80',
-        '13n': 'https://images.unsplash.com/photo-1517299321909-20b34934236a?auto=format&fit=crop&w=1200&q=80',
+        '13d': '{img_13d}',
+        '13n': '{img_13n}',
         // Mgła / zamglenie
-        '50d': 'https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227?auto=format&fit=crop&w=1200&q=80',
-        '50n': 'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=1200&q=80'
+        '50d': '{img_50d}',
+        '50n': '{img_50n}'
     }};
 
     function setHeroBackground(icon) {{
