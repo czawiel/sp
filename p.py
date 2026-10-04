@@ -68,6 +68,13 @@ img_01n = get_base64_image("01n.webp")
 img_02d = get_base64_image("02d.webp")
 img_02n = get_base64_image("02n.webp")
 
+# Funkcja pomocnicza renderująca HTML w iframe zgodna z najnowszym API
+def render_iframe(html_code, height=820, scrolling=False):
+    if hasattr(st, "iframe"):
+        st.iframe(html_code, height=height, scrolling=scrolling)
+    else:
+        components.html(html_code, height=height, scrolling=scrolling)
+
 # Baza predefiniowanych miast
 MIASTA = {
     "Płock": {"lat": 52.5463, "lon": 19.7065, "kraj": "Polska"},
@@ -117,7 +124,7 @@ if "detect_lat" in query_params and "detect_lon" in query_params:
 # ----------------- PANEL BOCZNY -----------------
 with st.sidebar:
     try:
-        st.image("logo.png", use_container_width=True)
+        st.image("logo.png", width="stretch")
     except Exception:
         pass
     st.header("Ustawienia Lokalizacji")
@@ -130,7 +137,7 @@ with st.sidebar:
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Szukaj", type="primary", use_container_width=True):
+        if st.button("Szukaj", type="primary", width="stretch"):
             if wpisane_miasto in MIASTA:
                 st.session_state.miasto_nazwa = wpisane_miasto
                 st.session_state.lat = MIASTA[wpisane_miasto]["lat"]
@@ -155,7 +162,7 @@ with st.sidebar:
                     st.error(f"Błąd wyszukiwania: {e}")
 
     with col2:
-        if st.button("Odśwież", use_container_width=True):
+        if st.button("Odśwież", width="stretch"):
             st.rerun()
 
     st.markdown("---")
@@ -200,7 +207,7 @@ with st.sidebar:
     }
     </script>
     """
-    components.html(gps_button_html, height=75)
+    render_iframe(gps_button_html, height=75)
 
 lat = st.session_state.lat
 lon = st.session_state.lon
@@ -858,4 +865,4 @@ dashboard_html = f"""
 """
 
 # Główny dashboard pogodowy
-components.html(dashboard_html, height=820, scrolling=False)
+render_iframe(dashboard_html, height=820, scrolling=False)
