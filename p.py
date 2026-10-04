@@ -82,6 +82,11 @@ img_13n = get_base64_image("13n.webp")
 img_50d = get_base64_image("50d.webp")
 img_50n = get_base64_image("50n.webp")
 
+kody_ikon = ["01d", "01n", "02d", "02n", "03d", "03n", "04d", "04n", 
+             "09d", "09n", "10d", "10n", "11d", "11n", "13d", "13n", "50d", "50n"]
+
+obrazy = {kod: get_base64_image(f"{kod}.webp") for kod in kody_ikon}
+
 # Baza predefiniowanych miast
 MIASTA = {
     "Płock": {"lat": 52.5463, "lon": 19.7065, "kraj": "Polska"},
