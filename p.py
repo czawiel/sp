@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import requests
+import base64
 from datetime import datetime
 
 # Ustawienia strony
@@ -53,6 +54,19 @@ API_KEY = st.secrets.get("OPENWEATHER_API_KEY", "")
 if not API_KEY:
     st.error("Brak klucza API! Skonfiguruj klucz 'OPENWEATHER_API_KEY' w ustawieniach Streamlit Secrets (App settings -> Secrets) lub w pliku .streamlit/secrets.toml.")
     st.stop()
+
+# Funkcja pomocnicza kodująca lokalne pliki webp do formatu Base64
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return f"data:image/webp;base64,{base64.b64encode(img_file.read()).decode()}"
+    except Exception:
+        return ""
+
+img_01d = get_base64_image("01d.webp")
+img_01n = get_base64_image("01n.webp")
+img_02d = get_base64_image("02d.webp")
+img_02n = get_base64_image("02n.webp")
 
 # Baza predefiniowanych miast
 MIASTA = {
@@ -712,16 +726,16 @@ dashboard_html = f"""
 </div>
 
 <script>
-    // Baza zdjęć pogodowych dopasowanych do kodów ikon OpenWeather (online URL)
+    // Baza zdjęć z zakodowanymi plikami Base64 z repozytorium oraz URL-ami zewnętrznymi
     const wallpapers = {{
         // Słonecznie / dzień
-        '01d': 'https://images.unsplash.com/photo-1622278693213-32407136f894?auto=format&fit=crop&w=1200&q=80',
+        '01d': '{img_01d}',
         // Czyste niebo / noc
-        '01n': 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1200&q=80',
+        '01n': '{img_01n}',
         // Lekkie zachmurzenie dzień
-        '02d': 'https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1200&q=80',
+        '02d': '{img_02d}',
         // Lekkie zachmurzenie noc
-        '02n': 'https://images.unsplash.com/photo-1532978379173-523e16f371f2?auto=format&fit=crop&w=1200&q=80',
+        '02n': '{img_02n}',
         // Chmury
         '03d': 'https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1200&q=80',
         '03n': 'https://images.unsplash.com/photo-1532978379173-523e16f371f2?auto=format&fit=crop&w=1200&q=80',
