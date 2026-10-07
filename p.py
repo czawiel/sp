@@ -31,9 +31,6 @@ st.markdown(
         background: #cfe2f3 !important;
     }
 
-    iframe {
-        background-color: #cfe2f3 !important;
-    }
 
     /* Nieprzezroczyste, stałe tło dla paska bocznego (desktop i mobile overlay) */
     [data-testid="stSidebar"],
@@ -349,7 +346,7 @@ with st.sidebar:
     components.html(gps_button_html, height=75)
 
     st.markdown("---")
-    st.markdown("##### Opinie, uwagi?")
+    st.markdown("##### Masz opinie, uwagi, komentarze?")
     st.link_button("Formularz kontaktowy", "https://fabryka.tech/kontakt", use_container_width=True)
 
 lat = st.session_state.lat
