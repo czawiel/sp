@@ -19,26 +19,6 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    /* Kolor tła głównej części aplikacji i iframe */
-    .stApp,
-    [data-testid="stAppViewContainer"],
-    .main .block-container {
-        background-color: #cfe2f3 !important;
-        background: #cfe2f3 !important;
-    }
-
-    iframe {
-        background-color: #cfe2f3 !important;
-    }
-
-    /* Pasek boczny zachowuje swój domyślny kolor tła */
-    [data-testid="stSidebar"],
-    [data-testid="stSidebar"] > div:first-child,
-    section[data-testid="stSidebarContent"] {
-        background-color: initial !important;
-        background: initial !important;
-    }
-
     /* Całkowite ukrycie podpowiedzi "Press Enter to apply" */
     [data-testid="InputInstructions"],
     [data-testid="stInputInstruction"],
@@ -69,6 +49,7 @@ st.markdown(
         margin-bottom: 10px;
         text-align: center;
         margin: auto;
+
     }
     .sidebar-logo-container img {
         width: 100%;
@@ -85,6 +66,11 @@ st.markdown(
     }
     footer {
         display: none !important;
+    }
+    .stApp {
+        background-color: #f1f5f9;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .main .block-container {
         padding: 0 !important;
@@ -241,7 +227,7 @@ with st.sidebar:
 
     st.header("Ustawienia Lokalizacji")
 
-    # Formularz: naciśnięcie Enter w polu tekstowym automatycznie wysyła formularz
+    # Formularz: naciśnięcie Enter w polu tekstowym automatycznie wysyła formularz (uruchamia Szukaj)
     with st.form("form_wyszukiwania", border=False):
         wpisane_miasto = st.text_input(
             "Wpisz lub wybierz miasto:",
@@ -328,10 +314,6 @@ with st.sidebar:
     </script>
     """
     components.html(gps_button_html, height=75)
-
-    st.markdown("---")
-    st.markdown("##### Opinie, uwagi?")
-    st.link_button("Formularz kontaktowy", "https://fabryka.tech/kontakt", use_container_width=True)
 
 lat = st.session_state.lat
 lon = st.session_state.lon
@@ -563,6 +545,12 @@ template_html = """<!DOCTYPE html>
         height: 100%;
         overflow: hidden;
         background: #cfe2f3;
+    }
+    .st-emotion-cache-4rsbii { 
+        background: #cfe2f3 !important;
+    }
+    .st-emotion-cache-6px8kg {
+        background: #cfe2f3 !important; 
     }
     .app-container {
         width: 100%;
