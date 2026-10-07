@@ -19,6 +19,32 @@ st.set_page_config(
 st.markdown(
     """
 <style>
+    /* Kolor tła wyłącznie dla głównej zawartości (bez sidebara) */
+    .stApp {
+        background-color: transparent !important;
+    }
+    
+    .stMain,
+    section[data-testid="stMain"],
+    [data-testid="stAppViewContainer"] > .main {
+        background-color: #cfe2f3 !important;
+        background: #cfe2f3 !important;
+    }
+
+    iframe {
+        background-color: #cfe2f3 !important;
+    }
+
+    /* Pełne przywrócenie domyślnego tła dla paska bocznego (Sidebar) */
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] > div:first-child,
+    section[data-testid="stSidebarContent"],
+    .st-emotion-cache-jik3eh,
+    .stSidebar {
+        background-color: var(--secondary-background-color) !important;
+        background: var(--secondary-background-color) !important;
+    }
+
     /* Całkowite ukrycie podpowiedzi "Press Enter to apply" */
     [data-testid="InputInstructions"],
     [data-testid="stInputInstruction"],
@@ -49,7 +75,6 @@ st.markdown(
         margin-bottom: 10px;
         text-align: center;
         margin: auto;
-
     }
     .sidebar-logo-container img {
         width: 100%;
@@ -67,11 +92,6 @@ st.markdown(
     footer {
         display: none !important;
     }
-    .stApp {
-        background-color: #f1f5f9;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
     .main .block-container {
         padding: 0 !important;
         max-width: 100% !important;
@@ -79,7 +99,8 @@ st.markdown(
     }
     .main iframe {
         width: 100% !important;
-        height: 96vh !important;
+        height: 100vh !important;
+        min-height: 850px !important;
         border: none !important;
         display: block !important;
     }
@@ -227,7 +248,6 @@ with st.sidebar:
 
     st.header("Ustawienia Lokalizacji")
 
-    # Formularz: naciśnięcie Enter w polu tekstowym automatycznie wysyła formularz (uruchamia Szukaj)
     with st.form("form_wyszukiwania", border=False):
         wpisane_miasto = st.text_input(
             "Wpisz lub wybierz miasto:",
@@ -314,6 +334,10 @@ with st.sidebar:
     </script>
     """
     components.html(gps_button_html, height=75)
+
+    st.markdown("---")
+    st.markdown("##### Opinie, uwagi?")
+    st.link_button("Formularz kontaktowy", "https://fabryka.tech/kontakt", use_container_width=True)
 
 lat = st.session_state.lat
 lon = st.session_state.lon
@@ -542,19 +566,13 @@ template_html = """<!DOCTYPE html>
     }
     html, body {
         width: 100%;
-        height: 100%;
-        overflow: hidden;
+        min-height: 100%;
         background: #cfe2f3;
-    }
-    .st-emotion-cache-4rsbii { 
-        background: #cfe2f3 !important;
-    }
-    .st-emotion-cache-6px8kg {
-        background: #cfe2f3 !important; 
+        overflow-x: hidden;
     }
     .app-container {
         width: 100%;
-        height: 100%;
+        min-height: 100vh;
         background: #cfe2f3;
         padding: 12px 16px;
         display: flex;
@@ -583,13 +601,13 @@ template_html = """<!DOCTYPE html>
     .hero-card {
         position: relative;
         border-radius: 24px;
-        padding: 2.5vh 2vw;
+        padding: 24px;
         color: white;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
-        height: 100%;
+        min-height: 480px;
         background-color: #1e293b;
         background-size: cover !important;
         background-position: center !important;
@@ -642,16 +660,14 @@ template_html = """<!DOCTYPE html>
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        margin: auto 0;
-        padding: 0.5vh 0;
+        margin: 20px 0;
         z-index: 2;
     }
     .hero-temp-block {
         text-align: right;
-        padding-right: 1.5vw;
     }
     .hero-temp-main {
-        font-size: clamp(58px, 6.2vw, 92px);
+        font-size: clamp(54px, 5.5vw, 92px);
         font-weight: 800;
         line-height: 1;
         text-shadow: 0 4px 14px rgba(0,0,0,0.5);
@@ -702,13 +718,14 @@ template_html = """<!DOCTYPE html>
         background: rgba(255, 255, 255, 0.92);
         backdrop-filter: blur(14px);
         border-radius: 18px;
-        padding: 1vh 0.8vw;
+        padding: 10px 8px;
         display: flex;
         justify-content: space-around;
         align-items: center;
         color: #1e293b;
         box-shadow: 0 6px 18px rgba(0,0,0,0.14);
         z-index: 2;
+        overflow-x: auto;
     }
     .day-col {
         display: flex;
@@ -716,44 +733,47 @@ template_html = """<!DOCTYPE html>
         align-items: center;
         text-align: center;
         gap: 2px;
+        min-width: 50px;
     }
     .day-name {
-        font-size: clamp(13px, 1.05vw, 16px);
+        font-size: 13px;
         font-weight: 800;
         color: #1e293b;
     }
     .day-icon {
-        width: clamp(34px, 3vw, 48px);
-        height: clamp(34px, 3vw, 48px);
+        width: 36px;
+        height: 36px;
     }
     .day-temp-main {
-        font-size: clamp(15px, 1.2vw, 19px);
+        font-size: 15px;
         font-weight: 800;
         color: #0f172a;
     }
     .day-temp-sub {
-        font-size: clamp(12px, 0.95vw, 14px);
+        font-size: 12px;
         font-weight: 600;
         color: #64748b;
     }
     .right-column {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
         height: 100%;
         min-height: 0;
     }
     .hourly-card {
         background: #f8fafc;
         border-radius: 24px;
-        padding: 1.6vh 1.4vw;
+        padding: 16px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.06);
         flex-shrink: 0;
+        overflow-x: auto;
     }
     .hourly-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        min-width: 320px;
     }
     .hour-col {
         display: flex;
@@ -761,45 +781,46 @@ template_html = """<!DOCTYPE html>
         align-items: center;
         text-align: center;
         gap: 2px;
+        min-width: 48px;
     }
     .hour-time {
-        font-size: clamp(12px, 0.95vw, 15px);
+        font-size: 13px;
         color: #475569;
         font-weight: 700;
     }
     .hour-icon {
-        width: clamp(34px, 2.8vw, 46px);
-        height: clamp(34px, 2.8vw, 46px);
+        width: 36px;
+        height: 36px;
     }
     .hour-temp {
-        font-size: clamp(15px, 1.2vw, 19px);
+        font-size: 15px;
         font-weight: 800;
         color: #0f172a;
     }
     .hour-hum {
-        font-size: clamp(12px, 0.9vw, 14px);
+        font-size: 12px;
         color: #0284c7;
         font-weight: 700;
     }
     .map-card {
         background: #f8fafc;
         border-radius: 24px;
-        padding: 1.6vh 1.4vw;
+        padding: 16px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.06);
         flex: 1;
         display: flex;
         flex-direction: column;
-        min-height: 0;
+        min-height: 280px;
     }
     .card-title {
-        font-size: clamp(17px, 1.3vw, 21px);
+        font-size: 18px;
         font-weight: 800;
         color: #0f172a;
     }
     #map {
         width: 100%;
         flex: 1;
-        min-height: 120px;
+        min-height: 220px;
         border-radius: 16px;
         margin-top: 8px;
         border: 1px solid #cbd5e1;
@@ -811,6 +832,38 @@ template_html = """<!DOCTYPE html>
         border-radius: 4px;
         margin-top: 8px;
         flex-shrink: 0;
+    }
+
+    /* RESTRUKTURYZACJA: KAFELKI JEDEN POD DRUGIM NA MNIEJSZYCH EKRANACH */
+    @media (max-width: 992px) {
+        html, body {
+            overflow-y: auto !important;
+            height: auto !important;
+        }
+        .app-container {
+            height: auto !important;
+            min-height: auto;
+            overflow-y: visible;
+        }
+        .dashboard-grid {
+            grid-template-columns: 1fr !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 16px;
+        }
+        .hero-card {
+            min-height: 420px;
+            height: auto !important;
+        }
+        .right-column {
+            height: auto !important;
+        }
+        .map-card {
+            min-height: 320px;
+        }
+        #map {
+            min-height: 250px;
+        }
     }
 </style>
 </head>
@@ -877,7 +930,6 @@ template_html = """<!DOCTYPE html>
         const lowerDesc = (desc || '').toLowerCase();
         const isNight = icon && icon.endsWith('n');
 
-        // Wykrywanie słabych opadów (kody 500, 520 oraz kody mżawki 300-321)
         const isLightRain = lowerDesc.includes('słabe opady') || 
                             lowerDesc.includes('słaby deszcz') || 
                             lowerDesc.includes('lekki deszcz') || 
@@ -890,7 +942,6 @@ template_html = """<!DOCTYPE html>
             bgKey = isNight ? '5n' : '5d';
         }
 
-        // Awaryjne dopasowanie tła (np. 5d -> 10d -> 02d)
         let url = wallpapers[bgKey];
         if (!url && isLightRain) {
             url = isNight ? (wallpapers['10n'] || wallpapers['09n']) : (wallpapers['10d'] || wallpapers['09d']);
@@ -1026,4 +1077,4 @@ dashboard_html = template_html
 for klucz, wartosc in podmiany.items():
     dashboard_html = dashboard_html.replace(klucz, wartosc)
 
-components.html(dashboard_html, height=820, scrolling=False)
+components.html(dashboard_html, height=880, scrolling=True)
