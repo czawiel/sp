@@ -40,8 +40,7 @@ st.markdown(
     div[data-testid="stSidebarUserContent"],
     .stSidebar,
     .st-emotion-cache-jik3eh {
-        background-color: #f8fafc !important;
-        background: #f8fafc !important;
+
         opacity: 1 !important;
     }
 
