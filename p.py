@@ -334,7 +334,7 @@ with st.sidebar:
     components.html(gps_button_html, height=75)
 
     st.markdown("---")
-    st.markdown("##### Opinie, uwagi?")
+    st.markdown("##### Masz opinie, uwagi, komentarze?")
     st.link_button("Formularz kontaktowy", "https://fabryka.tech/kontakt", use_container_width=True)
 
 lat = st.session_state.lat
@@ -833,7 +833,7 @@ template_html = """<!DOCTYPE html>
     }
 
     /* RESTRUKTURYZACJA: KAFELKI JEDEN POD DRUGIM NA MNIEJSZYCH EKRANACH */
-    @media (max-width: 992px) {
+    @media (max-width: 700px) {
         html, body {
             overflow-y: auto !important;
             height: auto !important;
