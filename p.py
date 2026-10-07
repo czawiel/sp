@@ -544,12 +544,13 @@ template_html = """<!DOCTYPE html>
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: beige;
+        background: #cfe2f3;
     }
+    .st-emotion-cache-4rsbii{ background: transparent !important;}
     .app-container {
         width: 100%;
         height: 100%;
-        background: beige;
+        background: #cfe2f3;
         padding: 12px 16px;
         display: flex;
         flex-direction: column;
