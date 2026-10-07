@@ -31,16 +31,31 @@ st.markdown(
         background: #cfe2f3 !important;
     }
 
+    iframe {
+        background-color: #cfe2f3 !important;
+    }
 
-
-    /* Pełne przywrócenie domyślnego tła dla paska bocznego (Sidebar) */
+    /* Nieprzezroczyste, stałe tło dla paska bocznego (desktop i mobile overlay) */
     [data-testid="stSidebar"],
     [data-testid="stSidebar"] > div:first-child,
+    [data-testid="stSidebarNav"],
     section[data-testid="stSidebarContent"],
-    .st-emotion-cache-jik3eh,
-    .stSidebar {
-        background-color: var(--secondary-background-color) !important;
-        background: var(--secondary-background-color) !important;
+    div[data-testid="stSidebarUserContent"],
+    .stSidebar,
+    .st-emotion-cache-jik3eh {
+        background-color: #f8fafc !important;
+        background: #f8fafc !important;
+        opacity: 1 !important;
+    }
+
+    /* Na telefonach / wąskich oknach pasek dostaje podbity z-index i tło zasłaniające treść pod spodem */
+    @media (max-width: 992px) {
+        [data-testid="stSidebar"] {
+            background-color: #f8fafc !important;
+            background: #f8fafc !important;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25) !important;
+            z-index: 9999999 !important;
+        }
     }
 
     /* Całkowite ukrycie podpowiedzi "Press Enter to apply" */
@@ -334,7 +349,7 @@ with st.sidebar:
     components.html(gps_button_html, height=75)
 
     st.markdown("---")
-    st.markdown("##### Masz opinie, uwagi, komentarze?")
+    st.markdown("##### Opinie, uwagi?")
     st.link_button("Formularz kontaktowy", "https://fabryka.tech/kontakt", use_container_width=True)
 
 lat = st.session_state.lat
@@ -833,7 +848,7 @@ template_html = """<!DOCTYPE html>
     }
 
     /* RESTRUKTURYZACJA: KAFELKI JEDEN POD DRUGIM NA MNIEJSZYCH EKRANACH */
-    @media (max-width: 700px) {
+    @media (max-width: 992px) {
         html, body {
             overflow-y: auto !important;
             height: auto !important;
