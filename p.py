@@ -19,19 +19,24 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    /* Ustawienie koloru #cfe2f3 na całą aplikację oraz pasek boczny (Sidebar) */
+    /* Kolor tła głównej części aplikacji i iframe */
     .stApp,
     [data-testid="stAppViewContainer"],
-    [data-testid="stSidebar"],
-    [data-testid="stSidebar"] > div:first-child,
-    section[data-testid="stSidebarContent"] {
+    .main .block-container {
         background-color: #cfe2f3 !important;
         background: #cfe2f3 !important;
     }
 
-    /* Dopasowanie tła iframe z komponentem */
     iframe {
         background-color: #cfe2f3 !important;
+    }
+
+    /* Pasek boczny zachowuje swój domyślny kolor tła */
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] > div:first-child,
+    section[data-testid="stSidebarContent"] {
+        background-color: initial !important;
+        background: initial !important;
     }
 
     /* Całkowite ukrycie podpowiedzi "Press Enter to apply" */
@@ -323,6 +328,10 @@ with st.sidebar:
     </script>
     """
     components.html(gps_button_html, height=75)
+
+    st.markdown("---")
+    st.markdown("##### Opinie, uwagi?")
+    st.link_button("Formularz kontaktowy", "https://fabryka.tech/kontakt", use_container_width=True)
 
 lat = st.session_state.lat
 lon = st.session_state.lon
