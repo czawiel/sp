@@ -31,9 +31,7 @@ st.markdown(
         background: #cfe2f3 !important;
     }
 
-    iframe {
-        background-color: #cfe2f3 !important;
-    }
+
 
     /* Pełne przywrócenie domyślnego tła dla paska bocznego (Sidebar) */
     [data-testid="stSidebar"],
