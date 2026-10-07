@@ -544,12 +544,12 @@ template_html = """<!DOCTYPE html>
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: #cfe2f3;
+        background: beige;
     }
     .app-container {
         width: 100%;
         height: 100%;
-        background: #cfe2f3;
+        background: beige;
         padding: 12px 16px;
         display: flex;
         flex-direction: column;
