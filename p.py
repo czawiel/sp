@@ -45,10 +45,10 @@ st.markdown(
     }
 
     /* Na telefonach / wąskich oknach pasek dostaje podbity z-index i tło zasłaniające treść pod spodem */
-    @media (max-width: 992px) {
+    @media (max-width: 700px) {
         [data-testid="stSidebar"] {
-            background-color: #f8fafc !important;
-            background: #f8fafc !important;
+            background-color: #f0f2f6 !important;
+            background: #f0f2f6 !important;
             box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25) !important;
             z-index: 9999999 !important;
         }
@@ -95,7 +95,7 @@ st.markdown(
     }
     
     header[data-testid="stHeader"] {
-        background: #262730 !important;
+        background: transparent !important;
         z-index: 999999 !important;
     }
     footer {
