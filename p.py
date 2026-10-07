@@ -95,7 +95,7 @@ st.markdown(
     }
     
     header[data-testid="stHeader"] {
-        background: transparent !important;
+        background: #262730 !important;
         z-index: 999999 !important;
     }
     footer {
@@ -844,7 +844,7 @@ template_html = """<!DOCTYPE html>
     }
 
     /* RESTRUKTURYZACJA: KAFELKI JEDEN POD DRUGIM NA MNIEJSZYCH EKRANACH */
-    @media (max-width: 992px) {
+    @media (max-width: 700px) {
         html, body {
             overflow-y: auto !important;
             height: auto !important;
