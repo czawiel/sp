@@ -546,7 +546,12 @@ template_html = """<!DOCTYPE html>
         overflow: hidden;
         background: #cfe2f3;
     }
-    .st-emotion-cache-4rsbii{ background: #cfe2f3 !important;}
+    .st-emotion-cache-4rsbii { 
+        background: #cfe2f3 !important;
+    }
+    .st-emotion-cache-6px8kg {
+        background: #cfe2f3 !important; 
+    }
     .app-container {
         width: 100%;
         height: 100%;
