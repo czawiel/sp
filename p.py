@@ -19,37 +19,95 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    /* Kolor tła wyłącznie dla głównej zawartości (bez sidebara) */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    /* Kolor tła dla głównego widoku - delikatny atmosferyczny gradient */
     .stApp {
-        background-color: transparent !important;
+        background: transparent !important;
     }
     
     .stMain,
     section[data-testid="stMain"],
     [data-testid="stAppViewContainer"] > .main {
-        background-color: #cfe2f3 !important;
-        background: #cfe2f3 !important;
+        background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 50%, #f1f5f9 100%) !important;
     }
 
-
-    /* Nieprzezroczyste, stałe tło dla paska bocznego (desktop i mobile overlay) */
+    /* Spójne, eleganckie tło i obramowanie dla paska bocznego (Sidebar) */
     [data-testid="stSidebar"],
-    [data-testid="stSidebar"] > div:first-child,
-    [data-testid="stSidebarNav"],
-    section[data-testid="stSidebarContent"],
-    div[data-testid="stSidebarUserContent"],
-    .stSidebar,
-    .st-emotion-cache-jik3eh {
-
+    [data-testid="stSidebar"] > div:first-child {
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+        border-right: 1px solid #cbd5e1 !important;
         opacity: 1 !important;
     }
 
-    /* Na telefonach / wąskich oknach pasek dostaje podbity z-index i tło zasłaniające treść pod spodem */
+    /* Nagłówki i etykiety w pasku bocznym */
+    [data-testid="stSidebar"] h1, 
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] h5 {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.3px;
+    }
+
+    [data-testid="stSidebar"] label {
+        color: #334155 !important;
+        font-weight: 600 !important;
+    }
+
+    /* Pole tekstowe w pasku bocznym */
+    [data-testid="stSidebar"] div[data-baseweb="input"] {
+        border-radius: 10px !important;
+        border: 1px solid #cbd5e1 !important;
+        background-color: #ffffff !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+        transition: all 0.2s ease;
+    }
+    [data-testid="stSidebar"] div[data-baseweb="input"]:focus-within {
+        border-color: #0284c7 !important;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+    }
+
+    /* Przyciski w formularzu i link button */
+    [data-testid="stSidebar"] button[kind="primaryFormSubmit"] {
+        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25) !important;
+        transition: all 0.2s ease !important;
+    }
+    [data-testid="stSidebar"] button[kind="primaryFormSubmit"]:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35) !important;
+    }
+
+    [data-testid="stSidebar"] button[kind="secondaryFormSubmit"],
+    [data-testid="stSidebar"] a[data-testid="stBaseLinkButton-secondary"] {
+        border-radius: 10px !important;
+        border: 1px solid #cbd5e1 !important;
+        background-color: #ffffff !important;
+        color: #334155 !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+    }
+    [data-testid="stSidebar"] button[kind="secondaryFormSubmit"]:hover,
+    [data-testid="stSidebar"] a[data-testid="stBaseLinkButton-secondary"]:hover {
+        background-color: #f8fafc !important;
+        border-color: #94a3b8 !important;
+        color: #0f172a !important;
+    }
+
+    /* Na telefonach / wąskich oknach pasek dostaje cień i wysoki z-index */
     @media (max-width: 700px) {
         [data-testid="stSidebar"] {
-            background-color: #f0f2f6 !important;
-            background: #f0f2f6 !important;
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25) !important;
+            background: #f8fafc !important;
+            box-shadow: 8px 0 32px rgba(15, 23, 42, 0.25) !important;
             z-index: 9999999 !important;
         }
     }
@@ -67,7 +125,7 @@ st.markdown(
         padding: 0 !important;
     }
 
-    /* Ukrycie przycisku Fullscreen dla obrazów (w tym logo) */
+    /* Ukrycie przycisku Fullscreen dla obrazów */
     button[title="View fullscreen"],
     button[title="Pełny ekran"],
     [data-testid="StyledFullScreenButton"],
@@ -76,14 +134,12 @@ st.markdown(
         visibility: hidden !important;
     }
 
-    /* Dopasowanie i brak zaokrągleń dla klikalnego kontenera logo */
+    /* Dopasowanie klikalnego kontenera logo */
     .sidebar-logo-container {
         display: block;
-        width: 85%;
-        margin-top: 10px;
-        margin-bottom: 10px;
+        width: 82%;
+        margin: 8px auto 16px auto;
         text-align: center;
-        margin: auto;
     }
     .sidebar-logo-container img {
         width: 100%;
@@ -92,6 +148,10 @@ st.markdown(
         clip-path: none !important;
         display: block;
         cursor: pointer;
+        transition: opacity 0.2s ease;
+    }
+    .sidebar-logo-container img:hover {
+        opacity: 0.9;
     }
     
     header[data-testid="stHeader"] {
@@ -109,7 +169,7 @@ st.markdown(
     .main iframe {
         width: 100% !important;
         height: 100vh !important;
-        min-height: 850px !important;
+        min-height: 860px !important;
         border: none !important;
         display: block !important;
     }
@@ -150,26 +210,9 @@ def find_image_file(base_name):
 def load_all_wallpapers():
     """Wczytuje i koduje tapety do Base64 tylko raz, zapisując je w pamięci podręcznej."""
     ikony = [
-        "01d",
-        "01n",
-        "02d",
-        "02n",
-        "03d",
-        "03n",
-        "04d",
-        "04n",
-        "09d",
-        "09n",
-        "10d",
-        "10n",
-        "11d",
-        "11n",
-        "13d",
-        "13n",
-        "50d",
-        "50n",
-        "5d",
-        "5n",
+        "01d", "01n", "02d", "02n", "03d", "03n", "04d", "04n",
+        "09d", "09n", "10d", "10n", "11d", "11n", "13d", "13n",
+        "50d", "50n", "5d", "5n",
     ]
     wallpapers = {}
     for kod in ikony:
@@ -217,11 +260,12 @@ if "detect_lat" in query_params and "detect_lon" in query_params:
     try:
         det_lat = float(query_params["detect_lat"])
         det_lon = float(query_params["detect_lon"])
-        geo_rev = requests.get(
+        geo_rev_res = requests.get(
             f"https://api.openweathermap.org/geo/1.0/reverse?lat={det_lat}&lon={det_lon}&limit=1&appid={API_KEY}",
             timeout=5,
-        ).json()
-        if geo_rev:
+        )
+        geo_rev = geo_rev_res.json() if geo_rev_res.status_code == 200 else []
+        if isinstance(geo_rev, list) and len(geo_rev) > 0:
             st.session_state.miasto_nazwa = geo_rev[0].get(
                 "local_names", {}
             ).get("pl", geo_rev[0].get("name", "Twoja Lokalizacja"))
@@ -253,7 +297,7 @@ with st.sidebar:
                 unsafe_allow_html=True,
             )
         except Exception:
-            st.image("logo3.svg", use_container_width=True)
+            pass
 
     st.header("Ustawienia Lokalizacji")
 
@@ -274,20 +318,25 @@ with st.sidebar:
                 "Odśwież", use_container_width=True
             )
 
-        if szukaj_klikniete:
-            if wpisane_miasto in MIASTA:
-                st.session_state.miasto_nazwa = wpisane_miasto
-                st.session_state.lat = MIASTA[wpisane_miasto]["lat"]
-                st.session_state.lon = MIASTA[wpisane_miasto]["lon"]
-                st.session_state.kraj = MIASTA[wpisane_miasto]["kraj"]
+        if szukaj_klikniete and wpisane_miasto:
+            # Dopasowanie nazwy miasta ze słownika niezależnie od wielkości liter
+            dopasowane_miasto = next(
+                (m for m in MIASTA if m.lower() == wpisane_miasto.lower()), None
+            )
+            if dopasowane_miasto:
+                st.session_state.miasto_nazwa = dopasowane_miasto
+                st.session_state.lat = MIASTA[dopasowane_miasto]["lat"]
+                st.session_state.lon = MIASTA[dopasowane_miasto]["lon"]
+                st.session_state.kraj = MIASTA[dopasowane_miasto]["kraj"]
                 st.rerun()
             else:
                 try:
-                    geo_res = requests.get(
+                    geo_req = requests.get(
                         f"https://api.openweathermap.org/geo/1.0/direct?q={wpisane_miasto}&limit=1&appid={API_KEY}",
                         timeout=5,
-                    ).json()
-                    if geo_res:
+                    )
+                    geo_res = geo_req.json() if geo_req.status_code == 200 else []
+                    if isinstance(geo_res, list) and len(geo_res) > 0:
                         st.session_state.miasto_nazwa = geo_res[0].get(
                             "local_names", {}
                         ).get("pl", geo_res[0]["name"])
@@ -305,18 +354,40 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("##### Automatyczna detekcja:")
     gps_button_html = """
-    <button onclick="getLocation()" style="
-        width: 100%;
-        background-color: #0284c7;
-        color: white;
-        border: none;
-        padding: 9px 14px;
-        border-radius: 8px;
-        font-weight: 700;
-        cursor: pointer;
-        font-size: 14px;
-    ">📍 Wykryj moją lokalizację</button>
-    <div id="gps-status" style="font-size: 11px; color: #64748b; margin-top: 6px; text-align: center;"></div>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&display=swap');
+        body { margin: 0; padding: 2px; font-family: 'Plus Jakarta Sans', sans-serif; background: transparent; }
+        .gps-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13.5px;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.22);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .gps-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.32);
+        }
+        #gps-status {
+            font-size: 11.5px;
+            color: #475569;
+            margin-top: 6px;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+    <button class="gps-btn" onclick="getLocation()">📍 Wykryj moją lokalizację</button>
+    <div id="gps-status"></div>
 
     <script>
     function getLocation() {
@@ -342,11 +413,15 @@ with st.sidebar:
     }
     </script>
     """
-    components.html(gps_button_html, height=75)
+    components.html(gps_button_html, height=76)
 
     st.markdown("---")
     st.markdown("##### Masz opinie, uwagi, komentarze?")
-    st.link_button("Formularz kontaktowy", "https://fabryka.tech/kontakt", use_container_width=True)
+    st.link_button(
+        "Formularz kontaktowy",
+        "https://fabryka.tech/kontakt",
+        use_container_width=True,
+    )
 
 lat = st.session_state.lat
 lon = st.session_state.lon
@@ -382,8 +457,14 @@ def pobierz_dane_pogodowe(p_lat, p_lon, key):
     # Fallback na API 2.5
     w_url = f"https://api.openweathermap.org/data/2.5/weather?lat={p_lat}&lon={p_lon}&appid={key}&units=metric&lang=pl"
     f_url = f"https://api.openweathermap.org/data/2.5/forecast?lat={p_lat}&lon={p_lon}&appid={key}&units=metric&lang=pl"
-    w_res = requests.get(w_url, timeout=8).json()
-    f_res = requests.get(f_url, timeout=8).json()
+    
+    w_req = requests.get(w_url, timeout=8)
+    f_req = requests.get(f_url, timeout=8)
+    w_req.raise_for_status()
+    f_req.raise_for_status()
+
+    w_res = w_req.json()
+    f_res = f_req.json()
 
     main = w_res.get("main", {})
     w_obj = w_res.get("weather", [{}])[0]
@@ -457,7 +538,7 @@ DNI = [
     "Sobota",
     "Niedziela",
 ]
-SKROTY = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nied"]
+SKROTY = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"]
 MIESIACE = [
     "",
     "Stycznia",
@@ -514,9 +595,9 @@ for d in pogoda["daily"][:7]:
          data-hum="{hum}" 
          data-pop="{pop}">
         <div class="day-name">{skrot}</div>
-        <img class="day-icon" src="https://openweathermap.org/img/wn/{ico}@2x.png" alt="ikona">
-        <div class="day-temp-main">{t_day}°C</div>
-        <div class="day-temp-sub">{t_night}°C</div>
+        <img class="day-icon" src="https://openweathermap.org/img/wn/{ico}@2x.png" alt="{desc}">
+        <div class="day-temp-main">{t_day}°</div>
+        <div class="day-temp-sub">{t_night}°</div>
     </div>
     """
 
@@ -550,7 +631,7 @@ for h in pogoda["hours"][:6]:
          data-hum="{hum}" 
          data-pop="{pop}">
         <div class="hour-time">{h_time}</div>
-        <img class="hour-icon" src="https://openweathermap.org/img/wn/{ico}@2x.png" alt="ikona">
+        <img class="hour-icon" src="https://openweathermap.org/img/wn/{ico}@2x.png" alt="{desc}">
         <div class="hour-temp">{temp}°C</div>
         <div class="hour-hum">💧 {hum}%</div>
     </div>
@@ -564,6 +645,9 @@ template_html = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -571,57 +655,66 @@ template_html = """<!DOCTYPE html>
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     html, body {
         width: 100%;
         min-height: 100%;
-        background: #cfe2f3;
+        background: transparent;
         overflow-x: hidden;
     }
     .app-container {
         width: 100%;
         min-height: 100vh;
-        background: #cfe2f3;
-        padding: 12px 16px;
+        background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 50%, #f1f5f9 100%);
+        padding: 14px 20px 20px 20px;
         display: flex;
         flex-direction: column;
     }
     .app-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
-        font-size: 14px;
+        margin-bottom: 14px;
+        flex-shrink: 0;
+    }
+    .header-badge {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(10px);
+        padding: 6px 18px;
+        border-radius: 999px;
+        font-size: 12px;
         font-weight: 800;
         letter-spacing: 2px;
-        color: #334155;
+        color: #0369a1;
         text-transform: uppercase;
-        margin-bottom: 8px;
-        padding: 0 4px;
-        flex-shrink: 0;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
     }
     .dashboard-grid {
         display: grid;
-        grid-template-columns: 1.4fr 1fr;
-        gap: 16px;
+        grid-template-columns: 1.38fr 1fr;
+        gap: 20px;
         flex: 1;
         min-height: 0;
     }
+
+    /* KARTA GŁÓWNA (HERO) */
     .hero-card {
         position: relative;
-        border-radius: 24px;
-        padding: 24px;
+        border-radius: 28px;
+        padding: 28px;
         color: white;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
-        min-height: 480px;
-        background-color: #1e293b;
+        box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        min-height: 500px;
+        background-color: #0f172a;
         background-size: cover !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
-        transition: background-image 0.35s ease-in-out;
+        transition: background 0.4s ease-in-out;
         overflow: hidden;
     }
     .hero-top-row {
@@ -629,112 +722,165 @@ template_html = """<!DOCTYPE html>
         justify-content: space-between;
         align-items: flex-start;
         z-index: 2;
+        gap: 12px;
+    }
+    .location-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 6px 14px;
+        border-radius: 999px;
+        margin-bottom: 10px;
     }
     .hero-city {
-        font-size: clamp(22px, 2vw, 32px);
-        font-weight: 900;
+        font-size: clamp(18px, 1.8vw, 26px);
+        font-weight: 800;
         letter-spacing: 0.5px;
         text-transform: uppercase;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        text-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
     .hero-date {
-        font-size: clamp(13px, 0.95vw, 16px);
-        opacity: 0.95;
-        margin-top: 2px;
-        text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        font-size: clamp(13px, 1vw, 15px);
+        font-weight: 500;
+        opacity: 0.92;
+        padding-left: 4px;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.45);
     }
     .hero-clock {
         font-size: clamp(20px, 1.6vw, 26px);
-        font-weight: 700;
-        margin-top: 3px;
-        text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        font-weight: 800;
+        margin-top: 2px;
+        padding-left: 4px;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.45);
     }
     .btn-reset {
-        background: rgba(15, 23, 42, 0.4);
+        background: rgba(15, 23, 42, 0.45);
         color: white;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        border-radius: 12px;
-        padding: 6px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 999px;
+        padding: 8px 16px;
         font-size: 13px;
         font-weight: 700;
         cursor: pointer;
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(12px);
         transition: all 0.2s ease;
         display: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .btn-reset:hover {
-        background: rgba(15, 23, 42, 0.65);
+        background: rgba(2, 132, 199, 0.85);
+        border-color: rgba(255, 255, 255, 0.6);
+        transform: translateY(-1px);
     }
+
     .hero-body {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        margin: 20px 0;
+        margin: 24px 0;
         z-index: 2;
     }
     .hero-temp-block {
         text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
     }
     .hero-temp-main {
-        font-size: clamp(54px, 5.5vw, 92px);
+        font-size: clamp(58px, 6vw, 96px);
         font-weight: 800;
-        line-height: 1;
-        text-shadow: 0 4px 14px rgba(0,0,0,0.5);
+        line-height: 0.95;
+        letter-spacing: -3px;
+        text-shadow: 0 6px 20px rgba(0,0,0,0.45);
     }
     .hero-feels {
-        font-size: clamp(14px, 1.05vw, 18px);
-        opacity: 0.95;
-        margin-bottom: 8px;
-        text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        font-size: clamp(13px, 1vw, 16px);
+        font-weight: 500;
+        opacity: 0.9;
+        margin-top: 6px;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.45);
     }
     .hero-conditions {
-        font-size: clamp(18px, 1.4vw, 24px);
+        font-size: clamp(18px, 1.5vw, 24px);
         font-weight: 800;
-        margin-bottom: 8px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        margin-bottom: 14px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
     .hero-subdetails {
-        font-size: clamp(13px, 1vw, 16px);
-        opacity: 0.95;
-        line-height: 1.45;
-        text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
     }
+    .stat-pill {
+        background: rgba(15, 23, 42, 0.42);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #f8fafc;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* INTERAKTYWNE KAFELKI DNI I GODZIN */
     .clickable-card {
         cursor: pointer;
-        border-radius: 14px;
-        padding: 6px;
-        transition: all 0.2s ease;
+        border-radius: 16px;
+        padding: 8px 6px;
+        transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
         user-select: none;
+        border: 1px solid transparent;
     }
     .clickable-card:hover {
-        transform: translateY(-2px);
+        transform: translateY(-3px);
     }
     .day-col.clickable-card:hover {
-        background: rgba(30, 41, 59, 0.08);
+        background: rgba(2, 132, 199, 0.08);
+        border-color: rgba(2, 132, 199, 0.18);
+    }
+    .hour-col.clickable-card {
+        background: rgba(241, 245, 249, 0.7);
+        border: 1px solid rgba(226, 232, 240, 0.8);
     }
     .hour-col.clickable-card:hover {
-        background: #e2e8f0;
+        background: rgba(224, 242, 254, 0.75);
+        border-color: rgba(125, 211, 252, 0.6);
     }
     .clickable-card.active-selected {
-        transform: scale(1.04);
-        background: #0284c7 !important;
-        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+        transform: translateY(-3px) scale(1.02);
+        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.45);
     }
     .clickable-card.active-selected div {
         color: white !important;
     }
+
+    /* PASEK TYGODNIOWY NA DOLE HERO */
     .daily-bar {
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(14px);
-        border-radius: 18px;
-        padding: 10px 8px;
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.95);
+        border-radius: 22px;
+        padding: 12px 10px;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         color: #1e293b;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
         z-index: 2;
         overflow-x: auto;
+        gap: 4px;
     }
     .day-col {
         display: flex;
@@ -742,16 +888,20 @@ template_html = """<!DOCTYPE html>
         align-items: center;
         text-align: center;
         gap: 2px;
-        min-width: 50px;
+        min-width: 56px;
+        flex: 1;
     }
     .day-name {
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 800;
-        color: #1e293b;
+        color: #334155;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
     }
-    .day-icon {
-        width: 36px;
-        height: 36px;
+    .day-icon, .hour-icon {
+        width: 40px;
+        height: 40px;
+        filter: drop-shadow(0 3px 5px rgba(15, 23, 42, 0.18));
     }
     .day-temp-main {
         font-size: 15px;
@@ -763,25 +913,41 @@ template_html = """<!DOCTYPE html>
         font-weight: 600;
         color: #64748b;
     }
+
+    /* PRAWA KOLUMNA */
     .right-column {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 20px;
         height: 100%;
         min-height: 0;
     }
     .hourly-card {
-        background: #f8fafc;
-        border-radius: 24px;
-        padding: 16px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 28px;
+        padding: 18px 20px;
+        box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
         flex-shrink: 0;
         overflow-x: auto;
+    }
+    .section-subtitle {
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #64748b;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
     .hourly-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 8px;
         min-width: 320px;
     }
     .hour-col {
@@ -789,17 +955,14 @@ template_html = """<!DOCTYPE html>
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 2px;
-        min-width: 48px;
+        gap: 3px;
+        min-width: 54px;
+        flex: 1;
     }
     .hour-time {
-        font-size: 13px;
+        font-size: 12.5px;
         color: #475569;
         font-weight: 700;
-    }
-    .hour-icon {
-        width: 36px;
-        height: 36px;
     }
     .hour-temp {
         font-size: 15px;
@@ -807,44 +970,75 @@ template_html = """<!DOCTYPE html>
         color: #0f172a;
     }
     .hour-hum {
-        font-size: 12px;
+        font-size: 11.5px;
         color: #0284c7;
         font-weight: 700;
     }
+
+    /* KARTA MAPY */
     .map-card {
-        background: #f8fafc;
-        border-radius: 24px;
-        padding: 16px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 28px;
+        padding: 18px 20px;
+        box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
         flex: 1;
         display: flex;
         flex-direction: column;
-        min-height: 280px;
+        min-height: 290px;
+    }
+    .card-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
     }
     .card-title {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 800;
         color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .card-badge {
+        font-size: 11px;
+        font-weight: 700;
+        color: #0284c7;
+        background: #e0f2fe;
+        padding: 4px 10px;
+        border-radius: 999px;
     }
     #map {
         width: 100%;
         flex: 1;
         min-height: 220px;
-        border-radius: 16px;
-        margin-top: 8px;
+        border-radius: 18px;
         border: 1px solid #cbd5e1;
+        box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
         z-index: 1;
     }
-    .map-scale {
-        height: 7px;
-        background: linear-gradient(to right, #38bdf8, #22c55e, #eab308, #ef4444);
-        border-radius: 4px;
-        margin-top: 8px;
+    .map-scale-wrapper {
+        margin-top: 10px;
         flex-shrink: 0;
     }
+    .map-scale {
+        height: 6px;
+        background: linear-gradient(to right, #38bdf8, #22c55e, #eab308, #ef4444);
+        border-radius: 999px;
+    }
+    .map-scale-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #64748b;
+        margin-top: 4px;
+    }
 
-    /* RESTRUKTURYZACJA: KAFELKI JEDEN POD DRUGIM NA MNIEJSZYCH EKRANACH */
-    @media (max-width: 700px) {
+    /* RESPONSYWNOŚĆ DLA MNIEJSZYCH EKRANÓW */
+    @media (max-width: 768px) {
         html, body {
             overflow-y: auto !important;
             height: auto !important;
@@ -852,7 +1046,7 @@ template_html = """<!DOCTYPE html>
         .app-container {
             height: auto !important;
             min-height: auto;
-            overflow-y: visible;
+            padding: 12px;
         }
         .dashboard-grid {
             grid-template-columns: 1fr !important;
@@ -861,7 +1055,8 @@ template_html = """<!DOCTYPE html>
             gap: 16px;
         }
         .hero-card {
-            min-height: 420px;
+            min-height: 440px;
+            padding: 20px;
             height: auto !important;
         }
         .right-column {
@@ -871,7 +1066,7 @@ template_html = """<!DOCTYPE html>
             min-height: 320px;
         }
         #map {
-            min-height: 250px;
+            min-height: 240px;
         }
     }
 </style>
@@ -880,16 +1075,17 @@ template_html = """<!DOCTYPE html>
 
 <div class="app-container">
     <div class="app-header">
-        <span></span>
-        <span>TWOJA STACJA POGODOWA</span>
-        <span></span>
+        <div class="header-badge">⛅ TWOJA STACJA POGODOWA</div>
     </div>
 
     <div class="dashboard-grid">
         <div class="hero-card" id="hero-card">
             <div class="hero-top-row">
                 <div>
-                    <div class="hero-city">__MIASTO__, __KRAJ__</div>
+                    <div class="location-pill">
+                        <span>📍</span>
+                        <span class="hero-city">__MIASTO__, __KRAJ__</span>
+                    </div>
                     <div class="hero-date" id="hero-date">__DATA__</div>
                     <div class="hero-clock" id="hero-clock">__GODZINA__</div>
                 </div>
@@ -899,12 +1095,12 @@ template_html = """<!DOCTYPE html>
             <div class="hero-body">
                 <div class="hero-temp-block">
                     <div class="hero-temp-main" id="hero-temp">__TEMP__°C</div>
-                    <div class="hero-feels" id="hero-feels">(odczuwalna __FEELS__°C)</div>
+                    <div class="hero-feels" id="hero-feels">Odczuwalna __FEELS__°C</div>
                     <div class="hero-conditions" id="hero-desc">__OPIS__</div>
                     <div class="hero-subdetails" id="hero-subdetails">
-                        Wiatr: __WIATR__ km/h<br>
-                        Wilgotność: __WILGOC__%<br>
-                        Opady: __OPADY__%
+                        <span class="stat-pill">💨 Wiatr: __WIATR__ km/h</span>
+                        <span class="stat-pill">💧 Wilgotność: __WILGOC__%</span>
+                        <span class="stat-pill">☔ Opady: __OPADY__%</span>
                     </div>
                 </div>
             </div>
@@ -916,15 +1112,26 @@ template_html = """<!DOCTYPE html>
 
         <div class="right-column">
             <div class="hourly-card">
+                <div class="section-subtitle">🕒 Prognoza godzinowa</div>
                 <div class="hourly-row">
                     __HOURLY_ITEMS__
                 </div>
             </div>
 
             <div class="map-card">
-                <div class="card-title">Mapa Pogody</div>
+                <div class="card-header-row">
+                    <div class="card-title">🗺️ Mapa Pogody</div>
+                    <div class="card-badge">Warstwa chmur</div>
+                </div>
                 <div id="map"></div>
-                <div class="map-scale"></div>
+                <div class="map-scale-wrapper">
+                    <div class="map-scale"></div>
+                    <div class="map-scale-labels">
+                        <span>Bezchmurnie</span>
+                        <span>Umiarkowane</span>
+                        <span>Pełne zachmurzenie</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -961,9 +1168,11 @@ template_html = """<!DOCTYPE html>
 
         const hero = document.getElementById('hero-card');
         if (url) {
-            hero.style.background = "linear-gradient(rgba(15, 23, 42, 0.40), rgba(15, 23, 42, 0.65)), url('" + url + "') center/cover no-repeat";
+            hero.style.background = "linear-gradient(180deg, rgba(15, 23, 42, 0.30) 0%, rgba(15, 23, 42, 0.72) 100%), url('" + url + "') center/cover no-repeat";
         } else {
-            hero.style.background = "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)";
+            hero.style.background = isNight 
+                ? "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%)"
+                : "linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #1e3a8a 100%)";
         }
     }
 
@@ -989,12 +1198,12 @@ template_html = """<!DOCTYPE html>
         document.getElementById('hero-date').innerText = data.date;
         document.getElementById('hero-clock').innerText = data.clock;
         document.getElementById('hero-temp').innerText = data.temp + '°C';
-        document.getElementById('hero-feels').innerText = '(odczuwalna ' + data.feels + '°C)';
+        document.getElementById('hero-feels').innerText = 'Odczuwalna ' + data.feels + '°C';
         document.getElementById('hero-desc').innerText = data.desc;
         document.getElementById('hero-subdetails').innerHTML = 
-            'Wiatr: ' + data.wind + ' km/h<br>' +
-            'Wilgotność: ' + data.hum + '%<br>' +
-            'Opady: ' + data.pop + '%';
+            '<span class="stat-pill">💨 Wiatr: ' + data.wind + ' km/h</span>' +
+            '<span class="stat-pill">💧 Wilgotność: ' + data.hum + '%</span>' +
+            '<span class="stat-pill">☔ Opady: ' + data.pop + '%</span>';
         setHeroBackground(data.icon, data.id, data.desc);
     }
 
@@ -1035,19 +1244,19 @@ template_html = """<!DOCTYPE html>
 
     L.tileLayer('https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=__API_KEY__', {
         maxZoom: 19,
-        opacity: 0.55
+        opacity: 0.6
     }).addTo(map);
 
     var marker = L.circleMarker([__LAT__, __LON__], {
-        radius: 7,
-        fillColor: "#ef4444",
+        radius: 8,
+        fillColor: "#0284c7",
         color: "#ffffff",
-        weight: 2,
+        weight: 2.5,
         opacity: 1,
         fillOpacity: 0.95
     }).addTo(map);
     
-    marker.bindTooltip("<b>__MIASTO_RAW__</b>", { permanent: true, direction: 'top', offset: [0, -6] }).openTooltip();
+    marker.bindTooltip("<b>__MIASTO_RAW__</b>", { permanent: true, direction: 'top', offset: [0, -8] }).openTooltip();
 
     setTimeout(function() { map.invalidateSize(); }, 250);
     window.addEventListener('resize', function() { map.invalidateSize(); });
